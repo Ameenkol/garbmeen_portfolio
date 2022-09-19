@@ -4,7 +4,7 @@
   flex-direction: column;
 }
 
-.app__footer-cards{
+.app__footer-cards {
   width: 60%;
   display: flex;
   justify-content: space-around;
@@ -12,53 +12,54 @@
   flex-wrap: wrap-reverse;
   margin: 4rem 2rem 2rem;
 
-  .app__footer-card{
+  .app__footer-card {
     min-width: 290px;
     display: flex;
     flex-direction: row;
     justify-content: flex-start;
     align-items: center;
-  
+
     margin: 0.8rem 0;
     padding: 1rem;
     border-radius: 10px;
     cursor: pointer;
     background-color: #fef4f5;
-  
+
     transition: all 0.3s ease-in-out;
-  
-    img{
+
+    img {
       width: 40px;
       height: 40px;
       margin: 0 0.7rem;
     }
-  
-    p{
+
+    p {
       font-weight: 600;
     }
-  
-    a{
+
+    a {
       text-decoration: none;
       font-size: 16px;
       font-weight: 500;
     }
-  
+
     &:hover {
       box-shadow: 0 0 25px #fef4f5;
     }
-  
+
     @media screen and (max-width: 450px) {
       width: 100%;
+      font-size: 14px;
     }
-  
+
     @media screen and (max-width: 768px) {
       width: 100%;
-    } 
+    }
   }
 }
 
 
-.app__footer-cards .app__footer-card:last-child{
+.app__footer-cards .app__footer-card:last-child {
   background-color: #f2f7fb;
 }
 
@@ -67,22 +68,23 @@
   flex-direction: column;
   margin: 1rem 2rem;
 
-  div{
+  div {
     width: 100%;
     margin: 0.75rem 0;
     border-radius: 10px;
     cursor: pointer;
     background-color: var(--primary-color);
-  
+
     transition: all 0.3s ease-in-out;
-  
-    input, textarea{
+
+    input,
+    .text-area {
       width: 100%;
       padding: 0.95rem;
       border: none;
       border-radius: 7px;
       background-color: var(--primary-color);
-  
+
       font-family: var(--font-base);
       font-size: 16px;
       line-height: 16px;
@@ -90,17 +92,17 @@
       outline: none;
     }
 
-    textarea{
+    .text-area {
       height: 200px;
     }
 
-    &:hover {
+    &:hover:not(:last-child) {
       box-shadow: 0 0 25px var(--primary-color);
     }
 
   }
-  
-  div{
+
+  div {
     display: flex;
     justify-content: center;
     width: 100%;
@@ -108,23 +110,23 @@
     box-shadow: none;
     cursor: default;
 
-      button {
-        padding: 1rem 2rem;
-        border-radius: 10px;
-        border: none;
-        background-color: var(--secondary-color);
-    
-        font-weight: 500;
-        font-size: 20px;
-        color: var(--white-color);
-        outline: none;
-        margin: 2rem 0 0 0;
-        font-family: var(--font-base);
-        cursor: pointer;
-      }
+    button {
+      padding: 1rem 2rem;
+      border-radius: 10px;
+      border: none;
+      background-color: var(--secondary-color);
+
+      font-weight: 500;
+      font-size: 20px;
+      color: var(--white-color);
+      outline: none;
+      margin: 2rem 0 0 0;
+      font-family: var(--font-base);
+      cursor: pointer;
+    }
   }
 
-  @media screen and (max-width: 768px){
+  @media screen and (max-width: 768px) {
     width: 100%;
     margin: 1rem 0;
   }
