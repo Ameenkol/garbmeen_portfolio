@@ -1,5 +1,5 @@
-import { useState } from "react";
 import { ErrorBoundary } from 'react-error-boundary';
+import { Formik, Form, Field, ErrorMessage } from 'formik';
 
 import { AppWrap, MotionWrap } from './../../wrapper';
 import { images } from "../../constants";
@@ -8,39 +8,6 @@ import { client } from "../../client";
 import "./Footer.scss";
 
 const Footer = () => {
-  const [formData, setFormData] = useState({ name: "", phone: "", email: "", message: "" });
-  const [isFormSubmitted, setIsFormSubmitted] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
-
-  const { name, phone, email, message } = formData;
-
-  const handleChangeInput = (e) => {
-    const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
-  };
-
-  const handleSubmit = () => {
-    setIsLoading(true);
-
-    const contact = {
-      _type: 'contact',
-      name: name,
-      phone: phone,
-      email: email,
-      message: message,
-    }
-
-    client.create(contact)
-      .then(() => {
-        setIsLoading(false);
-        setIsFormSubmitted(true);
-        setTimeout(() => {
-          setIsFormSubmitted(false);
-          setFormData({name: "", phone: "", email: "", message: ""} )
-        }, 5000);
-      })
-    
-  }
 
   function ErrorFallback({error, resetErrorBoundary}) {
     return (
@@ -73,39 +40,90 @@ const Footer = () => {
             <a href="tel:+2348161665061" className="p-text">+2348161665061</a>
           </div>
         </div>
-      {!isFormSubmitted ?
-        <div className="app__footer-form app__flex">
-          <div className="app__flex">
-            <input className="p-text" type="text" placeholder="Your Full Name" name="name" value={name} required={true} onChange={ handleChangeInput } />
-            </div>
-            
-          <div className="app__flex">
-            <input className="p-text" type="tel" placeholder="Your Phone Number" name="phone" value={phone} onChange={ handleChangeInput } />
-          </div>
 
-          <div className="app__flex">
-            <input className="p-text" type="email" placeholder="Your Email" name="email" value={email} required={true} pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$" onChange={ handleChangeInput } />
-          </div>
+      <Formik
+        initialValues={{ name: '', phone: '', email: '', message: '' }}
+       validate={values => {
+         const errors = {};
 
-          <div>
-            <textarea
-              className="p-text"
-              placeholder="Your Message"
-              value={message}
-              name="message"
-              onChange={handleChangeInput}
-            />
-          </div>
+        if (!values.name) {
+          errors.name = 'Required';
+        } else if (values.name.length > 30) {
+          errors.name = 'Must be 30 characters or less';
+         }
 
-          <div>
-            <button className="p-text" type="button" onClick={handleSubmit}>{isLoading ? "Sending..." : "Send Message"}</button>
-          </div>
-        </div>
-          :
-          <div>
-            <h3 className="head-text">Thank you for getting across to us 🙏</h3>
-          </div>
-      }
+        if (!values.phone) {
+          errors.phone = 'Required';
+        } else if (values.phone.length > 18) {
+          errors.phone = 'Must be 18 characters or less';
+        } else if (!/[0-9+]/.test(values.phone)) {
+          errors.phone = "Phone number must be in Number or International Format"
+         }
+         
+        if (!values.email) {
+          errors.email = 'Required';
+        } else if (
+          !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(values.email)
+        ) {
+          errors.email = 'Invalid email address';
+        }
+
+        if (!values.message) {
+          errors.message = 'Required';
+        } else if (values.message.length > 200) {
+          errors.message = 'Must be 200 characters or less, use Email instead';
+         }
+
+         return errors;
+       }}
+        onSubmit={(values, { setSubmitting }) => {
+         const contact = {
+          _type: 'contact',
+          name: values.name,
+          phone: values.phone,
+          email: values.email,
+          message: values.message,
+          }
+
+          client.create(contact)
+            .then(async () => {
+              setTimeout(() => {
+
+              });
+                setSubmitting(false);
+              }, 400);
+       }}
+      >
+       {({ isSubmitting }) => (
+            <Form className="app__footer-form app__flex">
+              <div className="app__flex">
+                <Field className="p-text" type="text" name="name" placeholder="Full Name" />
+                <ErrorMessage name="name" component="div" />
+              </div>
+              
+              <div className="app__flex">
+                <Field className="p-text" type="tel" name="phone" placeholder="Phone Number" />
+                <ErrorMessage name="phone" component="div" />
+              </div>
+              
+              <div className="app__flex">
+                <Field className="p-text" type="email" name="email" placeholder="Email Address" />
+                <ErrorMessage name="email" component="div" />
+              </div>
+              
+              <div className="app__flex">
+                <Field className="text-area p-text" type="text" name="message" placeholder="Subject And Message" />
+                <ErrorMessage name="message" component="div" />
+              </div>
+              
+              <div>
+                <button type="submit" disabled={isSubmitting}>
+                  {isSubmitting ? "Sending Message" : "Send Message"}
+                </button>
+              </div>
+          </Form>
+       )}
+     </Formik>
     </>
   </ErrorBoundary>
   )

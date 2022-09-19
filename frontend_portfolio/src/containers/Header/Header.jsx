@@ -15,6 +15,27 @@ const scaleVariants = {
     }
   }
 }
+
+const greeting = "Hello, I am";
+const name = "Ameen";
+const sentence = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: {
+      delay: 0.5,
+      staggerChildren: 0.08,
+    },
+  },
+}
+const letter = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    y: 0,
+  },
+}
+
 const Header = () => {
   function ErrorFallback({error, resetErrorBoundary}) {
     return (
@@ -40,13 +61,45 @@ const Header = () => {
           className="app__header-info">
 
           <div className="app__header-badge">
-            <div className="badge-cmp app__flex">
+            <motion.div
+              whileInView={{x: [-10, 0], opacity: [0, 1]}}
+              transition={{duration: 0.5}}
+              className="badge-cmp app__flex">
               <span>👋</span>
-              <div style={{marginLeft: 20}}>
-                <p className="p-text"> Hello, I am</p>
-                <h1 className="head-text">Ameen</h1>
+              <div style={{ marginLeft: 20 }}>
+                <motion.p
+                  variants={sentence}
+                  initial="hidden"
+                  animate="visible"
+                  className="p-text">
+                  {greeting.split("").map((char, index) => {
+                    return (
+                      <motion.span
+                        key={char + "-" + index}
+                      variants={letter}>
+                        {char}
+                      </motion.span>
+                    )
+                  })}
+                </motion.p>
+
+                <motion.h1
+                  variants={sentence}
+                  initial="hidden"
+                  animate="visible"
+                className="head-text">
+                {name.split("").map((char, index) => {
+                    return (
+                      <motion.span
+                        key={char + "-" + index}
+                        variants={letter}>
+                        {char}
+                      </motion.span>
+                    )
+                  })}
+                </motion.h1>
               </div>
-            </div>
+            </motion.div>
 
             <div className="tag-cmp app__flex">
               <p className="p-text">Front End Developer</p>
@@ -70,8 +123,6 @@ const Header = () => {
             src={images.profile}
             alt="profile_bg"
           />
-
-          {/* <img src={images.profile} alt="profile_bg" /> */}
 
           <motion.img
             whileInView={{ scale: [0, 1] }}
